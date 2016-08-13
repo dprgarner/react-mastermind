@@ -1,9 +1,9 @@
 import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MyComponent from './react';
+import Counter from './Counter';
 
 // Initialise the app
 $(function () {
-  ReactDOM.render(<MyComponent initialCount={7}/>, $('main')[0]);
+  ReactDOM.render(<Counter initialCount={7}/>, $('main')[0]);
 });

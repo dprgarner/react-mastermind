@@ -1,7 +1,7 @@
 import BaseComponent from './BaseComponent';
 import React from 'react';
 
-export default class MyComponent extends BaseComponent {
+export default class Counter extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {count: this.props.initialCount};
