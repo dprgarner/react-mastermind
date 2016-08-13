@@ -20,5 +20,5 @@ var Counter = React.createClass({
 
 // Initialise the app
 $(function () {
-    ReactDOM.render(<Counter initialCount={7}/>, mountNode);
+    ReactDOM.render(<Counter initialCount={7}/>, $('main')[0]);
 });
