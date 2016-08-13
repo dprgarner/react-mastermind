@@ -1,5 +1,4 @@
 import BaseComponent from './BaseComponent';
-import React from 'react';
 
 export default class Counter extends BaseComponent {
   constructor(props) {

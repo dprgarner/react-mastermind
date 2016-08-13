@@ -30,6 +30,6 @@ gulp.task('watch', function () {
   });
 });
  
-gulp.task('watchbuild', ['serve', 'watch'], function () {
+gulp.task('watchbuild', ['serve', 'watch', 'build'], function () {
   gulp.watch(['./src/*'], ['build']);
 });
