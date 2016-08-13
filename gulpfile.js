@@ -20,6 +20,7 @@ gulp.task('serve', function() {
     root: 'build',
     livereload: true,
     port: 80,
+    debug: true,
   });
 });
 

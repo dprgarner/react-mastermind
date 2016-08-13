@@ -1,8 +1,7 @@
-import $ from 'jquery';
+// import BaseComponent from './BaseComponent';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
-var Counter = React.createClass({
+export default React.createClass({
   getInitialState: function() {
     // naming it initialX clearly indicates that the only purpose
     // of the passed down prop is to initialize something internally
@@ -16,9 +15,4 @@ var Counter = React.createClass({
   render: function() {
     return <div onClick={this.handleClick}>{this.state.count}</div>;
   }
-});
-
-// Initialise the app
-$(function () {
-    ReactDOM.render(<Counter initialCount={7}/>, $('main')[0]);
 });
