@@ -36,6 +36,15 @@ class MastermindPeg extends BaseComponent {
   }
 }
 
+class MastermindSmallPeg extends BaseComponent {
+  render() {
+    let style = {
+      'backgroundColor': colourHex[this.props.colour],
+    }
+    return <li className='small-peg' style={style}/>;
+  }
+}
+
 class MastermindPanel extends BaseComponent {
   render() {
     return (<ol className='panel'>
@@ -49,14 +58,34 @@ class MastermindPanel extends BaseComponent {
   }
 }
 
+class MastermindScore extends BaseComponent {
+  render() {
+    let i = 0;
+    let scorePegs = [].concat(
+      _(this.props.black).times(() => 
+        <MastermindSmallPeg key={i++} colour={BLACK} />),
+      _(this.props.white).times(() => 
+        <MastermindSmallPeg key={i++} colour={WHITE} />)
+    );
+    return <ol className='score'>{scorePegs}</ol>;
+  }
+}
+
 class MastermindRow extends BaseComponent {
   render() {
+    let score = ('white' in this.props) ? (
+      <MastermindScore white={this.props.white} black={this.props.black} />
+    ) : '';
+
     return (
-      <ol className='row'>
-        {this.props.pegs.map((colour, i) => (
-          <MastermindPeg key={i} colour={colour}/>
-        ))}
-      </ol>
+      <div className='row'>
+        <ol className='pegs'>
+          {this.props.pegs.map((colour, i) => (
+            <MastermindPeg key={i} colour={colour}/>
+          ))}
+        </ol>
+        {score}
+      </div>
     )
   }
 }
@@ -105,16 +134,27 @@ class Model {
       state.rows.push({pegs: []});
       currentTurn++;
     }
-    state.rows[currentTurn].pegs.push(colour);
-
+    let pegs = state.rows[currentTurn].pegs;
+    if (this.uniqueColours && pegs.indexOf(colour) !== -1) return;
+    pegs.push(colour);
+    if (pegs.length === this.maxPegs) this.score(state.rows[currentTurn]);
     this.publish(state);
+  }
+
+  score(row) {
+    row.white = 2;
+    row.black = 1;
   }
 }
 
 class Mastermind extends BaseComponent {
   constructor(props) {
     super(props);
-    this.model = new Model({rows: []}, {maxPegs: 4});
+    this.model = new Model({rows: []}, {
+      maxPegs: 4,
+      uniqueColours: true,
+      secret: [RED, GREEN, BLUE, YELLOW],
+    });
     this.state = this.model.state;
     this.model.subscribe(() => this.setState(this.model.state));
   }

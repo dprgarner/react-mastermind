@@ -29,6 +29,36 @@
   width: 50px;
   height: 50px;
   display: inline-block;
+  box-sizing: border-box;
+}
+
+.pegs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+  display: inline-block;
+}
+
+.score {
+  background-color: lightgray;
+  width: 50px;
+  height: 50px;
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+  display: inline-block;
+}
+
+.small-peg {
+  border: 1px solid black;
+  width: 25px;
+  height: 25px;
+  box-sizing: border-box;
+
+  display: inline-block;
 }
 
 pre {
