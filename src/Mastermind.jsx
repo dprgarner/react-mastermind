@@ -75,37 +75,52 @@ class MastermindBoard extends BaseComponent {
   }
 }
 
+let MastermindState = (props) =>
+<pre dangerouslySetInnerHTML={{__html: JSON.stringify(props.data,null,2)}}></pre>;
+
 class Model {
   constructor(opts) {
     this.state = {rows: []};
     this.maxPegs = opts.maxPegs;
+    this.listeners = [];
+  }
+
+  cloneState() {
+    return JSON.parse(JSON.stringify(this.state));
+  }
+
+  subscribe(cb) {
+    this.listeners.push(cb);
+  }
+
+  publish(state) {
+    this.state = state;
+    this.listeners.forEach((cb) => cb());
   }
 
   addPeg(colour) {
-    let newState = JSON.parse(JSON.stringify(this.state));
-    let currentTurn = newState.rows.length - 1;
-    if (currentTurn === -1 || newState.rows[currentTurn].pegs.length === this.maxPegs) {
-      newState.rows.push({pegs: []});
+    let state = this.cloneState();
+    let currentTurn = state.rows.length - 1;
+    if (currentTurn === -1 || state.rows[currentTurn].pegs.length === this.maxPegs) {
+      state.rows.push({pegs: []});
       currentTurn++;
     }
-    newState.rows[currentTurn].pegs.push(colour);
-    this.state = newState;
+    state.rows[currentTurn].pegs.push(colour);
+
+    this.publish(state);
   }
 }
-
-let MastermindState = (props) =>
-<pre dangerouslySetInnerHTML={{__html: JSON.stringify(props.data,null,2)}}></pre>;
 
 class Mastermind extends BaseComponent {
   constructor(props) {
     super(props);
     this.model = new Model({maxPegs: 4});
     this.state = this.model.state;
+    this.model.subscribe(() => this.setState(this.model.state));
   }
 
   handlePress(colour) {
     this.model.addPeg(colour);
-    this.setState(this.model.state);
   }
 
   render() {
