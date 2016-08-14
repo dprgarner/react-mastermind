@@ -1,4 +1,5 @@
 import BaseComponent from './BaseComponent';
+import _ from 'underscore';
 
 const RED = 0;
 const GREEN = 1;
@@ -29,6 +30,16 @@ class MastermindPeg extends BaseComponent {
   }
 }
 
+class MastermindPanel extends BaseComponent {
+  render() {
+    return (<ol className='panel'>
+        {this.props.availableColours.map((colour, i) => (
+          <MastermindPeg key={i} colour={colour}/>
+        ))}
+    </ol>);
+  }
+}
+
 class MastermindRow extends BaseComponent {
   render() {
     return (
@@ -41,7 +52,7 @@ class MastermindRow extends BaseComponent {
   }
 }
 
-class Mastermind extends BaseComponent {
+class MastermindBoard extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {rows: [
@@ -59,6 +70,18 @@ class Mastermind extends BaseComponent {
           </li>
         ))}
       </ol>
+    );
+  }
+}
+
+class Mastermind extends BaseComponent {
+  render() {
+    let availableColours = _.keys(colourHex);
+    return (
+      <div>
+        <MastermindBoard />
+        <MastermindPanel availableColours={availableColours} />
+      </div>
     );
   }
 }
