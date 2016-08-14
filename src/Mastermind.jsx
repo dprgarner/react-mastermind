@@ -108,9 +108,9 @@ let MastermindState = (props) =>
 <pre dangerouslySetInnerHTML={{__html: JSON.stringify(props.data,null,2)}}></pre>;
 
 class Model {
-  constructor(initialState, opts) {
+  constructor(opts) {
     this.listeners = [];
-    this.state = initialState;
+    this.setInitialState();
     _.extend(this, opts);
   }
 
@@ -125,6 +125,22 @@ class Model {
   publish(state) {
     this.state = state;
     this.listeners.forEach((cb) => cb());
+  }
+
+  setInitialState() {
+    this.state = {rows: []};
+  }
+
+  createSecret() {
+    this.setInitialState();
+
+    if (this.uniqueColours) {
+      this.secret = _.sample(this.availableColours, 4);
+    } else {
+      this.secret = _.times(4, () => _.sample(this.availableColours));
+    }
+    console.log('secret:', JSON.stringify(this.secret))
+    this.publish(this.state);
   }
 
   addPeg(colour) {
@@ -168,14 +184,19 @@ class Model {
 class Mastermind extends BaseComponent {
   constructor(props) {
     super(props);
-    this.model = new Model(
-      {rows: []},
-      {
-        maxPegs: 4,
-        uniqueColours: false,
-        secret: [RED, GREEN, BLUE, YELLOW],
-      }
-    );
+
+    this.availableColours = _.chain(colourHex)
+      .keys()
+      .omit([BLACK, WHITE])
+      .map((str)=>parseInt(str, 10))
+      .value();
+    this.model = new Model({
+      maxPegs: 4,
+      uniqueColours: true,
+      availableColours: this.availableColours
+    });
+
+    this.model.createSecret();
     this.state = this.model.state;
     this.model.subscribe(() => this.setState(this.model.state));
   }
@@ -185,17 +206,11 @@ class Mastermind extends BaseComponent {
   }
 
   render() {
-    let availableColours = _.chain(colourHex)
-      .omit([WHITE, BLACK])
-      .keys()
-      .map((str)=>parseInt(str, 10))
-      .value();
-
     return (
       <div>
         <MastermindBoard rows={this.state.rows}/>
         <MastermindPanel
-          availableColours={availableColours}
+          availableColours={this.availableColours}
           handlePress={this.handlePress} />
         <MastermindState data={this.state} />
       </div>
