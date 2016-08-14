@@ -79,10 +79,10 @@ let MastermindState = (props) =>
 <pre dangerouslySetInnerHTML={{__html: JSON.stringify(props.data,null,2)}}></pre>;
 
 class Model {
-  constructor(opts) {
-    this.state = {rows: []};
-    this.maxPegs = opts.maxPegs;
+  constructor(initialState, opts) {
     this.listeners = [];
+    this.state = initialState;
+    _.extend(this, opts);
   }
 
   cloneState() {
@@ -114,7 +114,7 @@ class Model {
 class Mastermind extends BaseComponent {
   constructor(props) {
     super(props);
-    this.model = new Model({maxPegs: 4});
+    this.model = new Model({rows: []}, {maxPegs: 4});
     this.state = this.model.state;
     this.model.subscribe(() => this.setState(this.model.state));
   }
@@ -124,7 +124,7 @@ class Mastermind extends BaseComponent {
   }
 
   render() {
-    let availableColours = _.keys(colourHex);
+    let availableColours = _.keys(_.omit(colourHex, [WHITE, BLACK]));
     return (
       <div>
         <MastermindBoard rows={this.state.rows}/>
