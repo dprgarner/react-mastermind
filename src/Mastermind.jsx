@@ -142,8 +142,28 @@ class Model {
   }
 
   score(row) {
-    row.white = 2;
-    row.black = 1;
+    row.black = row.white = 0;
+    let pegs = JSON.parse(JSON.stringify(row.pegs));
+    let maxPegs = pegs.length;
+    let secret = JSON.parse(JSON.stringify(this.secret));
+    for (let i = 0; i < maxPegs; i++) {
+      console.log(pegs, secret);
+      if (pegs[i] === secret[i]) {
+        console.log('b');
+        row.black += 1;
+        pegs[i] = null;
+        secret[i] = null;
+      }
+    }
+    for (let i = 0; i < maxPegs; i++) {
+      let index = pegs.indexOf(secret[i]);
+      if (pegs[i] && index !== -1) {
+        console.log('w');
+        row.white += 1;
+        pegs[i] = null;
+        secret[index] = null;
+      }
+    }
   }
 }
 
@@ -152,7 +172,7 @@ class Mastermind extends BaseComponent {
     super(props);
     this.model = new Model({rows: []}, {
       maxPegs: 4,
-      uniqueColours: true,
+      uniqueColours: false,
       secret: [RED, GREEN, BLUE, YELLOW],
     });
     this.state = this.model.state;
@@ -164,7 +184,12 @@ class Mastermind extends BaseComponent {
   }
 
   render() {
-    let availableColours = _.keys(_.omit(colourHex, [WHITE, BLACK]));
+    let availableColours = _.chain(colourHex)
+      .omit([WHITE, BLACK])
+      .keys()
+      .map((str)=>parseInt(str, 10))
+      .value();
+
     return (
       <div>
         <MastermindBoard rows={this.state.rows}/>
