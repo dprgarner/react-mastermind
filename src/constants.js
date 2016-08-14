@@ -4,8 +4,11 @@ export const BLUE = 2;
 export const YELLOW = 3;
 export const CYAN = 4;
 export const MAGENTA = 5;
-export const BLACK = 6;
-export const WHITE = 7;
+export const ORANGE = 6
+export const PURPLE = 7;
+export const BLACK = 10;
+export const WHITE = 11;
+
 
 export const colourHex = {
   [RED]: '#f00',
@@ -14,6 +17,8 @@ export const colourHex = {
   [YELLOW]: '#ff0',
   [CYAN]: '#0ff',
   [MAGENTA]: '#f0f',
+  [ORANGE]: '#f80',
+  [PURPLE]: '#848',
   [BLACK]: '#000',
   [WHITE]: '#fff',
 };

@@ -1,5 +1,6 @@
-import BaseComponent from './BaseComponent';
 import _ from 'underscore';
+
+import BaseComponent from './BaseComponent';
 import {BLACK, WHITE, colourHex} from './constants';
 import Model from './Model';
 
@@ -83,6 +84,11 @@ class Board extends BaseComponent {
 let State = (props) => <pre>{JSON.stringify(props.data,null,2)}</pre>;
 
 class MastermindModel extends Model {
+  constructor(opts) {
+    super(opts);
+    this.createSecret();
+  }
+
   setInitialState() {
     this.state = {rows: []};
   }
@@ -143,19 +149,7 @@ class Mastermind extends BaseComponent {
   constructor(props) {
     super(props);
 
-    this.availableColours = _.chain(colourHex)
-      .keys()
-      .omit([BLACK, WHITE])
-      .map((str)=>parseInt(str, 10))
-      .value();
-
-    this.model = new MastermindModel({
-      maxPegs: 4,
-      uniqueColours: true,
-      availableColours: this.availableColours
-    });
-
-    this.model.createSecret();
+    this.model = new MastermindModel(props);
     this.state = this.model.state;
     this.model.subscribe(() => this.setState(this.model.state));
   }
@@ -169,7 +163,7 @@ class Mastermind extends BaseComponent {
       <div>
         <Board rows={this.state.rows}/>
         <Panel
-          availableColours={this.availableColours}
+          availableColours={this.props.availableColours}
           handlePress={this.handlePress} />
         <State data={this.state} />
       </div>
