@@ -16,7 +16,7 @@
 
 .panel {
   float: left;
-  border: 1px solid black;
+  /*border-bottom: 1px solid black;*/
   list-style: none;
   width: 50px;
   margin: 0 20px 0 0 ;
@@ -25,7 +25,13 @@
 }
 
 .peg {
+  border: 1px solid black;
   width: 50px;
   height: 50px;
   display: inline-block;
+}
+
+pre {
+  width: 350px;
+  float: right;
 }
