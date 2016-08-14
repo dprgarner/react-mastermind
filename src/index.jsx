@@ -1,8 +1,7 @@
 import ReactDOM from 'react-dom';
-import Counter from './Counter';
-// import Mastermind from './Mastermind';
+import Mastermind from './Mastermind';
 
 // Initialise the app
 $(function () {
-  ReactDOM.render(<Counter initialCount={1}/>, $('main')[0]);
+  ReactDOM.render(<Mastermind/>, $('main')[0]);
 });
