@@ -147,18 +147,16 @@ class Model {
     let maxPegs = pegs.length;
     let secret = JSON.parse(JSON.stringify(this.secret));
     for (let i = 0; i < maxPegs; i++) {
-      console.log(pegs, secret);
       if (pegs[i] === secret[i]) {
-        console.log('b');
         row.black += 1;
         pegs[i] = null;
         secret[i] = null;
       }
     }
+
     for (let i = 0; i < maxPegs; i++) {
-      let index = pegs.indexOf(secret[i]);
-      if (pegs[i] && index !== -1) {
-        console.log('w');
+      let index = secret.indexOf(pegs[i]);
+      if (pegs[i] !== null && index !== -1) {
         row.white += 1;
         pegs[i] = null;
         secret[index] = null;
@@ -170,11 +168,14 @@ class Model {
 class Mastermind extends BaseComponent {
   constructor(props) {
     super(props);
-    this.model = new Model({rows: []}, {
-      maxPegs: 4,
-      uniqueColours: false,
-      secret: [RED, GREEN, BLUE, YELLOW],
-    });
+    this.model = new Model(
+      {rows: []},
+      {
+        maxPegs: 4,
+        uniqueColours: false,
+        secret: [RED, GREEN, BLUE, YELLOW],
+      }
+    );
     this.state = this.model.state;
     this.model.subscribe(() => this.setState(this.model.state));
   }
